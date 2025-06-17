@@ -36,6 +36,7 @@ list_of_files = [
     "notebook/eda.ipynb",
     "notebook/model_building.ipynb",
     "notebook/mongodb_demo.ipynb",
+    "notebook/evidently_demo.ipynb",
 ]
 
 
