@@ -1,24 +1,31 @@
-import os
 import sys
+import logging
 
-def error_message_detail(error, error_detail:sys):
+def error_message_detail(error: Exception, error_detail: sys) -> str:
+    """
+    Extracts detailed error information including file name, line number, and the error message.
+    """
     _, _, exc_tb = error_detail.exc_info()
     file_name = exc_tb.tb_frame.f_code.co_filename
-    error_message = "Error occurred python script name [{0}] line number [{1}] error message [{2}]".format(
-        file_name, exc_tb.tb_lineno, str(error)
-    )
-
+    line_number = exc_tb.tb_lineno
+    error_message = f"Error occurred in python script: [{file_name}] at line number [{line_number}]: {str(error)}"
+    
+    logging.error(error_message)  # optional logging
     return error_message
 
 class MyException(Exception):
-    def __init__(self, error_message, error_detail):
+    """
+    Custom exception class for handling errors in the US visa application.
+    """
+    def __init__(self, error: Exception, error_detail: sys):
         """
-        :param error_message: error message in string format
-        """
-        super().__init__(error_message)
-        self.error_message = error_message_detail(
-            error_message, error_detail=error_detail
-        )
+        Initializes the MyException with a detailed error message.
 
-    def __str__(self):
+        :param error: The actual exception object.
+        :param error_detail: The sys module to access traceback details.
+        """
+        self.error_message = error_message_detail(error, error_detail)
+        super().__init__(self.error_message)
+
+    def __str__(self) -> str:
         return self.error_message
